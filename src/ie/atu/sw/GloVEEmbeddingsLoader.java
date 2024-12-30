@@ -30,6 +30,8 @@ public class GloVEEmbeddingsLoader extends FileProcessor {
      * @throws Throwable if an error occurs during concurrent task execution
      */
     public void loadWordEmbeddings(String embeddingsFile) throws Throwable {
+        System.out.println("Loading word embeddings from: " + embeddingsFile);
+
         try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
             Files.lines(Paths.get(embeddingsFile)).forEach(line -> {
                 scope.fork(() -> {
@@ -50,6 +52,14 @@ public class GloVEEmbeddingsLoader extends FileProcessor {
             scope.join();
             //if a task failed, throw exception
             scope.throwIfFailed(e -> e);
+
+            System.out.println("Successfully loaded word embeddings.");
+        } catch (IOException e) {
+            System.err.println("IO Exception while reading the embeddings file: " + embeddingsFile);
+            throw e;
+        } catch (Throwable e) {
+            System.err.println("Error during concurrent task execution while loading embeddings file: " + embeddingsFile);
+            throw e;
         }
     }
 

@@ -37,6 +37,7 @@ public class TextProcessor {
      */
     public void processTextFile(String textFile, String outputFile) throws Throwable {
         List<String> outputLines = new CopyOnWriteArrayList<>();
+        System.out.println("Processing the text file: " + textFile);
 
         try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
             Files.lines(Paths.get(textFile)).forEach(line -> {
@@ -49,6 +50,10 @@ public class TextProcessor {
             scope.throwIfFailed(e -> e);
 
             fileProcessor.writeFileLines(outputFile, outputLines);
+            System.out.println("Successfully processed text file and wrote output to: " + outputFile);
+        } catch (Exception e) {
+            System.err.println("Error processing text file: " + textFile);
+            throw e;
         }
     }
 

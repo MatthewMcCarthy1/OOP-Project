@@ -18,11 +18,16 @@ public abstract class FileProcessor {
      */
     public List<String> readFileLines(String filePath) throws IOException {
         List<String> lines = new ArrayList<>();
+        System.out.println("Reading file: " + filePath);
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 lines.add(line);
             }
+            System.out.println("Successfully read file: " + filePath);
+        } catch (IOException e) {
+            System.err.println("IO Exception while reading file: " + filePath);
+            throw e;
         }
         return lines;
     }
@@ -36,11 +41,16 @@ public abstract class FileProcessor {
      * @throws IOException if an I/O error occurs while writing to the file
      */
     public void writeFileLines(String filePath, List<String> lines) throws IOException {
+        System.out.println("Writing to file: " + filePath);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             for (String line : lines) {
                 writer.write(line);
                 writer.newLine();
             }
+            System.out.println("Successfully wrote to file: " + filePath);
+        } catch (IOException e) {
+            System.err.println("IO Exception while writing to file: " + filePath);
+            throw e;
         }
     }
 }
