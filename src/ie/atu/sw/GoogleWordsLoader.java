@@ -80,13 +80,13 @@ public class GoogleWordsLoader extends FileProcessor {
     /**
      * Processes a file to load Google 1000 words.
      *
-     * @param inputFilePath  the path to the input file
-     * @param outputFilePath the path to the output file (not used in this implementation)
+     * @param textFile  the path to the input file
+     * @param outputFile the path to the output file (not used in this implementation)
      * @throws IOException if an I/O error occurs during processing
      * @throws Throwable   if any other error occurs during processing
      */
     @Override
-    public void processFile(String inputFilePath, String outputFilePath) throws Throwable {
-        loadGoogle1000List(inputFilePath);
+    public void processFile(String textFile, String outputFile) throws Throwable {
+        loadGoogle1000List(textFile);
     }
 }

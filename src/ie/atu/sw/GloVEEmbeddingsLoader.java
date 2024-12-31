@@ -78,13 +78,13 @@ public class GloVEEmbeddingsLoader extends FileProcessor {
     /**
      * Processes a file to load GloVE embeddings.
      *
-     * @param inputFilePath  the path to the input file
-     * @param outputFilePath the path to the output file (not used in this implementation)
+     * @param textFile  the path to the input file
+     * @param outputFile the path to the output file (not used in this implementation)
      * @throws IOException if an I/O error occurs during processing
      * @throws Throwable   if any other error occurs during processing
      */
     @Override
-    public void processFile(String inputFilePath, String outputFilePath) throws Throwable {
-        loadWordEmbeddings(inputFilePath);
+    public void processFile(String textFile, String outputFile) throws Throwable {
+        loadWordEmbeddings(textFile);
     }
 }
