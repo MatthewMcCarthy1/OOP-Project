@@ -10,11 +10,11 @@ import java.util.concurrent.StructuredTaskScope;
 
 /**
  * The GoogleWordsLoader class is responsible for loading the Google 1000 words from a specified
- * file into a concurrent skip list set. It extends the FileProcessor class to utilize its file
- * reading capabilities.
+ * file into a concurrent skip list set. It extends FileProcessor for its file processing.
  */
-public class GoogleWordsLoader extends FileProcessor{
+public class GoogleWordsLoader extends FileProcessor {
     private final ConcurrentSkipListSet<String> google1000Set = new ConcurrentSkipListSet<>();
+
     /**
      * Loads the Google 1000 words from a specified file using virtual threads.
      *
@@ -25,7 +25,7 @@ public class GoogleWordsLoader extends FileProcessor{
      *
      * @param google1000File the path to the Google 1000 words file
      * @throws IOException if an I/O error occurs while reading the file
-     * @throws Throwable if an error occurs during concurrent task execution
+     * @throws Throwable   if an error occurs during concurrent task execution
      */
     public void loadGoogle1000List(String google1000File) throws Throwable {
         System.out.println("Loading Google 1000 words from: " + google1000File);
@@ -43,7 +43,7 @@ public class GoogleWordsLoader extends FileProcessor{
             scope.throwIfFailed(e -> e);
 
             System.out.println("Successfully loaded Google 1000 words.");
-        }catch (IOException e) {
+        } catch (IOException e) {
             System.err.println("IO Exception while reading the Google 1000 words file: " + google1000File);
             throw e;
         } catch (Throwable e) {
@@ -75,5 +75,18 @@ public class GoogleWordsLoader extends FileProcessor{
      */
     public ConcurrentSkipListSet<String> getGoogle1000Set() {
         return google1000Set;
+    }
+
+    /**
+     * Processes a file to load Google 1000 words.
+     *
+     * @param inputFilePath  the path to the input file
+     * @param outputFilePath the path to the output file (not used in this implementation)
+     * @throws IOException if an I/O error occurs during processing
+     * @throws Throwable   if any other error occurs during processing
+     */
+    @Override
+    public void processFile(String inputFilePath, String outputFilePath) throws Throwable {
+        loadGoogle1000List(inputFilePath);
     }
 }

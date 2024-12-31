@@ -1,13 +1,13 @@
 package ie.atu.sw;
 
+//Reference: https://stackoverflow.com/questions/520241/how-do-i-calculate-the-cosine-similarity-of-two-vectors
+
 /**
  * The SimilarityCalculator class provides methods to calculate the cosine similarity between two vectors.
  *
  * <p>Cosine similarity is a measure of similarity between two non-zero vectors of an inner product space.
  * It is defined to equal the cosine of the angle between them, which is also the same as the inner product
  * of the same vectors normalized to both have length 1.</p>
- *
- * Original source: https://stackoverflow.com/questions/520241/how-do-i-calculate-the-cosine-similarity-of-two-vectors
  */
 public class SimilarityCalculator {
     /**
@@ -27,17 +27,17 @@ public class SimilarityCalculator {
         if (vectorA == null || vectorB == null || vectorA.length != vectorB.length) {
             return 0;
         }
-        
+
         double dotProduct = 0;
         double norm1 = 0;
         double norm2 = 0;
-        
+
         for (int i = 0; i < vectorA.length; i++) {
             dotProduct += vectorA[i] * vectorB[i];
             norm1 += vectorA[i] * vectorA[i];
             norm2 += vectorB[i] * vectorB[i];
         }
-        
+
         return dotProduct / (Math.sqrt(norm1) * Math.sqrt(norm2));
     }
 }

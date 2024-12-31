@@ -2,6 +2,7 @@ package ie.atu.sw;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
+
 /**
  * The MapGoogle1000 class manages word embeddings and similarity calculations
  * for text simplification using the Google 1000 most common words.
@@ -11,6 +12,7 @@ public class MapGoogle1000 {
     private final ConcurrentHashMap<String, double[]> embeddingsMap;
     private final ConcurrentHashMap<String, double[]> google1000Embeddings;
     private final SimilarityCalculator similarityCalculator;
+
     /**
      * Constructs a MapGoogle1000 object with the given Google 1000 set and embeddings map.
      *
@@ -40,6 +42,7 @@ public class MapGoogle1000 {
             }
         }
     }
+
     /**
      * Finds the most similar word from the Google 1000 set for a given word.
      *

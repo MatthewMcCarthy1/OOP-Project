@@ -10,8 +10,8 @@ import java.util.concurrent.StructuredTaskScope;
 
 /**
  * The GloVEEmbeddingsLoader class is responsible for loading GloVe word embeddings
- * from a specified file into a concurrent hash map. It extends the FileProcessor class
- * to utilize its file reading capabilities.
+ * from a specified file into a concurrent hash map. It extends FileProcessor for
+ * its file processing.
  */
 public class GloVEEmbeddingsLoader extends FileProcessor {
     private final ConcurrentHashMap<String, double[]> embeddingsMap = new ConcurrentHashMap<>();
@@ -27,7 +27,7 @@ public class GloVEEmbeddingsLoader extends FileProcessor {
      *
      * @param embeddingsFile the path to the GloVe embeddings file
      * @throws IOException if an I/O error occurs while reading the file
-     * @throws Throwable if an error occurs during concurrent task execution
+     * @throws Throwable   if an error occurs during concurrent task execution
      */
     public void loadWordEmbeddings(String embeddingsFile) throws Throwable {
         System.out.println("Loading word embeddings from: " + embeddingsFile);
@@ -73,5 +73,18 @@ public class GloVEEmbeddingsLoader extends FileProcessor {
      */
     public ConcurrentHashMap<String, double[]> getEmbeddings() {
         return embeddingsMap;
+    }
+
+    /**
+     * Processes a file to load GloVE embeddings.
+     *
+     * @param inputFilePath  the path to the input file
+     * @param outputFilePath the path to the output file (not used in this implementation)
+     * @throws IOException if an I/O error occurs during processing
+     * @throws Throwable   if any other error occurs during processing
+     */
+    @Override
+    public void processFile(String inputFilePath, String outputFilePath) throws Throwable {
+        loadWordEmbeddings(inputFilePath);
     }
 }

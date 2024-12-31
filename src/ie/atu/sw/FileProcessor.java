@@ -2,42 +2,19 @@ package ie.atu.sw;
 
 import java.io.*;
 import java.util.*;
+
 /**
- * The FileProcessor class provides methods for reading from and writing to files.
- * It handles basic file I/O operations, specifically for reading and writing lists of strings.
+ * The FileProcessor class provides a method for writing to files.
+ * It requires subclasses to implement specific file processing logic.
  */
 public abstract class FileProcessor {
-    /**
-     * Reads all lines from a specified file and returns them as a List of Strings.
-     *
-     * <p><b>Time Complexity:</b> O(n), where n is the number of lines in the file.</p>
-     *
-     * @param filePath the path to the file to be read
-     * @return a List of Strings containing all lines from the file
-     * @throws IOException if an I/O error occurs while reading the file
-     */
-    public List<String> readFileLines(String filePath) throws IOException {
-        List<String> lines = new ArrayList<>();
-        System.out.println("Reading file: " + filePath);
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                lines.add(line);
-            }
-            System.out.println("Successfully read file: " + filePath);
-        } catch (IOException e) {
-            System.err.println("IO Exception while reading file: " + filePath);
-            throw e;
-        }
-        return lines;
-    }
     /**
      * Writes a List of Strings to a specified file.
      *
      * <p><b>Time Complexity:</b> O(n), where n is the number of lines to be written.</p>
      *
      * @param filePath the path to the file where lines will be written
-     * @param lines a List of Strings to be written to the file
+     * @param lines    a List of Strings to be written to the file
      * @throws IOException if an I/O error occurs while writing to the file
      */
     public void writeFileLines(String filePath, List<String> lines) throws IOException {
@@ -47,10 +24,20 @@ public abstract class FileProcessor {
                 writer.write(line);
                 writer.newLine();
             }
-            System.out.println("Successfully wrote to file: " + filePath);
         } catch (IOException e) {
             System.err.println("IO Exception while writing to file: " + filePath);
             throw e;
         }
     }
+
+    /**
+     * Abstract method to be implemented by subclasses for specific file processing logic.
+     *
+     * @param textFile   the path to the file to be processed
+     * @param outputFile the path to the output file
+     * @throws IOException if an I/O error occurs during processing
+     * @throws Throwable   if any other error occurs during processing
+     */
+
+    public abstract void processFile(String textFile, String outputFile) throws Throwable;
 }
