@@ -38,6 +38,5 @@ public abstract class FileProcessor {
      * @throws IOException if an I/O error occurs during processing
      * @throws Throwable   if any other error occurs during processing
      */
-
     public abstract void processFile(String textFile, String outputFile) throws Throwable;
 }
