@@ -36,5 +36,9 @@ Employs cosine similarity calculations to find the most semantically similar wor
 - **GloVEEmbeddingsLoader**: Loads GloVe word embeddings into a concurrent map.
 
 ## How to use
-To run the application navigate to the .jar file and execute the following command: 
-java -cp ./oop.jar ie.atu.sw.Runner
+To run the application navigate to the .jar file and execute the following command:  
+```sh
+java -cp ./oop.jar ie.atu.sw.Runner  
+```
+A menu should pop up for you to enter your choices. 
+Please note that for you to select option 5, you must specify all files in options 1-4. 
