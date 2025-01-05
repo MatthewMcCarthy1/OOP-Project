@@ -10,8 +10,8 @@ import java.util.concurrent.ConcurrentSkipListSet;
 public class MapGoogle1000 {
     private final ConcurrentSkipListSet<String> google1000Set;
     private final ConcurrentHashMap<String, double[]> embeddingsMap;
-    private final ConcurrentHashMap<String, double[]> google1000Embeddings;
-    private final SimilarityCalculator similarityCalculator;
+    private final ConcurrentHashMap<String, double[]> google1000Embeddings = new ConcurrentHashMap<>();;
+    private final SimilarityCalculator similarityCalculator = new SimilarityCalculator();;
 
     /**
      * Constructs a MapGoogle1000 object with the given Google 1000 set and embeddings map.
@@ -24,8 +24,6 @@ public class MapGoogle1000 {
     public MapGoogle1000(ConcurrentSkipListSet<String> google1000Set, ConcurrentHashMap<String, double[]> embeddingsMap) {
         this.google1000Set = google1000Set;
         this.embeddingsMap = embeddingsMap;
-        this.google1000Embeddings = new ConcurrentHashMap<>();
-        this.similarityCalculator = new SimilarityCalculator();
     }
 
     /**
@@ -34,7 +32,7 @@ public class MapGoogle1000 {
      * <p><b>Time Complexity:</b> O(n), where n is the number of words in google1000Set, this method
      * iterates through each word in google1000Set once</p>
      */
-    public synchronized void initializeGoogle1000Embeddings() {
+    public void initializeGoogle1000Embeddings() {
         for (String word : google1000Set) {
             double[] embedding = embeddingsMap.get(word);
             if (embedding != null) {
@@ -52,7 +50,7 @@ public class MapGoogle1000 {
      * @param word The word to find a similar word for
      * @return The most similar word from the Google 1000 set, or the original word if not found
      */
-    public synchronized String findMostSimilarWord(String word) {
+    public String findMostSimilarWord(String word) {
         double[] wordVector = embeddingsMap.get(word);
         if (wordVector == null) {
             return word; // If the word is not in the embeddings map, return the word itself
@@ -84,7 +82,7 @@ public class MapGoogle1000 {
      * @param word The word to process
      * @return The processed word
      */
-    public synchronized String processWord(String word) {
+    public String processWord(String word) {
         if (google1000Set.contains(word)) {
             return word;
         } else if (embeddingsMap.containsKey(word)) {

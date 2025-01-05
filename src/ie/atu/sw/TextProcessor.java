@@ -3,8 +3,6 @@ package ie.atu.sw;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.Arrays;
 
-//Reference:  Moodle -> oop-VirtualThreadLabs -> StructuredFileParser.java
-
 /**
  * The TextProcessor class is responsible for processing text files by simplifying words
  * using the Google 1000 most common words and their embeddings.
@@ -12,6 +10,7 @@ import java.util.Arrays;
 public class TextProcessor extends FileProcessor {
     private final MapGoogle1000 mapGoogle1000;
     private CopyOnWriteArrayList<String> outputLines = new CopyOnWriteArrayList<>();
+
     /**
      * Constructs a TextProcessor with the given MapGoogle1000.
      *
@@ -34,11 +33,11 @@ public class TextProcessor extends FileProcessor {
      * @throws Throwable If an error occurs during file processing
      */
     @Override
-    public void processFile(String textFile, String outputFile) throws Throwable {
+    void processFile(String textFile, String outputFile) throws Throwable {
         outputLines = new CopyOnWriteArrayList<>();
         System.out.println("Processing the text file: " + textFile);
 
-        load(textFile);
+        loadAndProcessLines(textFile);
 
         writeFileLines(outputFile, outputLines);
         System.out.println("Successfully processed text file and wrote output to: " + outputFile);
@@ -47,12 +46,12 @@ public class TextProcessor extends FileProcessor {
     /**
      * Processes a single line of text, simplifying each word.
      *
-     * <p><b>Time Complexity:</b> O(m), where m is the number of words in the line</p>
+     * <p><b>Time Complexity:</b> O(n), where n is the number of words in the line</p>
      *
      * @param line The line of text to process
      */
     @Override
-    protected void process(String line) {
+    void process(String line) {
         StringBuilder processedLine = new StringBuilder();
         Arrays.stream(line.split("\\s+")).forEach(word -> {
             String lowerWord = word.toLowerCase();
