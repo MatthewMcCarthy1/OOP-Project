@@ -39,7 +39,8 @@ public class Runner {
      * @throws Throwable If an error occurs during menu operations
      */
     public static void menu() throws Throwable {
-        while (true) {
+        boolean running = true;
+        while (running) {
             //You should put the following code into a menu or Menu class
             System.out.println(ConsoleColour.WHITE);
             System.out.println("************************************************************");
@@ -78,7 +79,7 @@ public class Runner {
                     break;
                 case "0":
                     System.out.println("Exiting...");
-                    System.exit(0);
+                    running = false;
                     break;
                 default:
                     System.out.println("Invalid option. Please try again.");

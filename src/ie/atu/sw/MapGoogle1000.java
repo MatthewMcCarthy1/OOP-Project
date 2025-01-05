@@ -34,7 +34,7 @@ public class MapGoogle1000 {
      * <p><b>Time Complexity:</b> O(n), where n is the number of words in google1000Set, this method
      * iterates through each word in google1000Set once</p>
      */
-    public void initializeGoogle1000Embeddings() {
+    public synchronized void initializeGoogle1000Embeddings() {
         for (String word : google1000Set) {
             double[] embedding = embeddingsMap.get(word);
             if (embedding != null) {
@@ -52,7 +52,7 @@ public class MapGoogle1000 {
      * @param word The word to find a similar word for
      * @return The most similar word from the Google 1000 set, or the original word if not found
      */
-    public String findMostSimilarWord(String word) {
+    public synchronized String findMostSimilarWord(String word) {
         double[] wordVector = embeddingsMap.get(word);
         if (wordVector == null) {
             return word; // If the word is not in the embeddings map, return the word itself
@@ -84,7 +84,7 @@ public class MapGoogle1000 {
      * @param word The word to process
      * @return The processed word
      */
-    public String processWord(String word) {
+    public synchronized String processWord(String word) {
         if (google1000Set.contains(word)) {
             return word;
         } else if (embeddingsMap.containsKey(word)) {

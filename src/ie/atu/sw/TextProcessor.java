@@ -1,11 +1,7 @@
 package ie.atu.sw;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.StructuredTaskScope;
+import java.util.Arrays;
 
 //Reference:  Moodle -> oop-VirtualThreadLabs -> StructuredFileParser.java
 
@@ -15,7 +11,7 @@ import java.util.concurrent.StructuredTaskScope;
  */
 public class TextProcessor extends FileProcessor {
     private final MapGoogle1000 mapGoogle1000;
-
+    private CopyOnWriteArrayList<String> outputLines = new CopyOnWriteArrayList<>();
     /**
      * Constructs a TextProcessor with the given MapGoogle1000.
      *
@@ -39,25 +35,13 @@ public class TextProcessor extends FileProcessor {
      */
     @Override
     public void processFile(String textFile, String outputFile) throws Throwable {
-        List<String> outputLines = new CopyOnWriteArrayList<>();
+        outputLines = new CopyOnWriteArrayList<>();
         System.out.println("Processing the text file: " + textFile);
 
-        try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
-            Files.lines(Paths.get(textFile)).forEach(line -> {
-                scope.fork(() -> {
-                    processLine(line, outputLines);
-                    return null;
-                });
-            });
-            scope.join();
-            scope.throwIfFailed(e -> e);
+        load(textFile);
 
-            writeFileLines(outputFile, outputLines);
-            System.out.println("Successfully processed text file and wrote output to: " + outputFile);
-        } catch (Exception e) {
-            System.err.println("Error processing text file: " + textFile);
-            throw e;
-        }
+        writeFileLines(outputFile, outputLines);
+        System.out.println("Successfully processed text file and wrote output to: " + outputFile);
     }
 
     /**
@@ -65,10 +49,10 @@ public class TextProcessor extends FileProcessor {
      *
      * <p><b>Time Complexity:</b> O(m), where m is the number of words in the line</p>
      *
-     * @param line        The line of text to process
-     * @param outputLines The list to add the processed line to
+     * @param line The line of text to process
      */
-    private void processLine(String line, List<String> outputLines) {
+    @Override
+    protected void process(String line) {
         StringBuilder processedLine = new StringBuilder();
         Arrays.stream(line.split("\\s+")).forEach(word -> {
             String lowerWord = word.toLowerCase();
