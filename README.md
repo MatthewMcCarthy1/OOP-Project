@@ -4,6 +4,8 @@
 
 This project is aimed at simplifying text using word embeddings and virtual threads. It includes a variety of components to handle different aspects of text processing, from loading word embeddings to calculating text similarity.
 
+Note: I have not added the files for GloVe embeddings and Google 1000 as this may cause issues.
+
 ## Author
 
 Matthew McCarthy (G00373167)
