@@ -1,0 +1,9 @@
+# Build output
+out/
+
+# IDE files 
+.idea/
+
+*.class
+*.jar
+*.log
