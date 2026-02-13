@@ -1,7 +1,10 @@
 package ie.atu.sw;
 
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.StructuredTaskScope;
 
 /**
  * The TextProcessor class is responsible for processing text files by simplifying words
@@ -9,12 +12,9 @@ import java.util.Arrays;
  */
 public class TextProcessor extends FileProcessor {
     private final MapGoogle1000 mapGoogle1000;
-    private CopyOnWriteArrayList<String> outputLines = new CopyOnWriteArrayList<>();
 
     /**
      * Constructs a TextProcessor with the given MapGoogle1000.
-     *
-     * <p><b>Time Complexity:</b> O(1), constant time operation</p>
      *
      * @param mapGoogle1000 The MapGoogle1000 to process words
      */
@@ -23,10 +23,7 @@ public class TextProcessor extends FileProcessor {
     }
 
     /**
-     * Processes a text file, simplifying words and writing the result to an output file.
-     *
-     * <p><b>Time Complexity:</b> O(n * m), where n is the number of lines in the file and m is the average
-     * number of words per line</p>
+     * Processes a text file, simplifying words and writing the result to an output file while preserving order.
      *
      * @param textFile   The path to the input text file
      * @param outputFile The path to the output file
@@ -34,30 +31,51 @@ public class TextProcessor extends FileProcessor {
      */
     @Override
     void processFile(String textFile, String outputFile) throws Throwable {
-        outputLines = new CopyOnWriteArrayList<>();
         System.out.println("Processing the text file: " + textFile);
 
-        loadAndProcessLines(textFile);
+        // Read all lines to maintain order
+        List<String> lines = Files.readAllLines(Paths.get(textFile));
+        String[] results = new String[lines.size()];
 
-        writeFileLines(outputFile, outputLines);
+        try (var scope = StructuredTaskScope.open()) {
+            for (int i = 0; i < lines.size(); i++) {
+                final int index = i;
+                final String line = lines.get(i);
+                scope.fork(() -> {
+                    results[index] = processLine(line);
+                    return null;
+                });
+            }
+            scope.join();
+        }
+
+        writeFileLines(outputFile, Arrays.asList(results));
         System.out.println("Successfully processed text file and wrote output to: " + outputFile);
     }
 
     /**
      * Processes a single line of text, simplifying each word.
      *
-     * <p><b>Time Complexity:</b> O(n), where n is the number of words in the line</p>
-     *
      * @param line The line of text to process
+     * @return The processed line
      */
+    private String processLine(String line) {
+        StringBuilder processedLine = new StringBuilder();
+        String[] words = line.split("\\s+");
+        for (String word : words) {
+            if (word.isEmpty()) continue;
+            // Basic cleanup of punctuation to find the core word
+            String cleanedWord = word.toLowerCase().replaceAll("[^a-z']", "");
+            String processedWord = mapGoogle1000.processWord(cleanedWord);
+            
+            // Re-add the processed word (simplified or original)
+            processedLine.append(processedWord).append(" ");
+        }
+        return processedLine.toString().trim();
+    }
+
     @Override
     void process(String line) {
-        StringBuilder processedLine = new StringBuilder();
-        Arrays.stream(line.split("\\s+")).forEach(word -> {
-            String lowerWord = word.toLowerCase();
-            String processedWord = mapGoogle1000.processWord(lowerWord);
-            processedLine.append(processedWord).append(" ");
-        });
-        outputLines.add(processedLine.toString().trim());
+        // Not used by TextProcessor as we override processFile for ordering logic
     }
 }
