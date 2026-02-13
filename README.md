@@ -1,46 +1,63 @@
-# OOP-Project: Simplifying Text with Word Embeddings and Virtual Threads
+# OOP-Project: Text Simplifier with Virtual Threads
 
 ## Overview
 
-This project is aimed at simplifying text using word embeddings and virtual threads. It includes a variety of components to handle different aspects of text processing, from loading word embeddings to calculating text similarity.
-
-Note: I have not added the files for GloVe embeddings and Google 1000 as this may cause issues.
+This project is a high-performance text simplification tool built with **Java 25** and **Virtual Threads (Project Loom)**. It demonstrates modern concurrency patterns by using `StructuredTaskScope` to process text files in parallel, replacing complex words with simpler alternatives based on GloVe word embeddings and the Google 1000 most common words list.
 
 ## Author
 
-Matthew McCarthy (G00373167)
+**Matthew McCarthy** (G00373167)
 
 ## Features
 
-### 1. Text Simplification
-The application simplifies text by replacing complex words with their simpler equivalents using the Google 1000 most common words list.
+- **🚀 Virtual Threads & Structured Concurrency:** Leverages Java's latest concurrent APIs (`StructuredTaskScope`) for high-throughput, non-blocking I/O operations.
+- **🧠 Word Embeddings:** Uses pre-trained GloVe vectors to calculate semantic similarity and find the best simple synonyms.
+- **⚡ Parallel Processing:** Simplifies large text files efficiently by processing lines concurrently while maintaining output order.
+- **📉 Vector Similarity:** Implements Cosine Similarity to mathematically determine the closeness of word meanings.
+- **📦 Plug-and-Play:** Includes necessary embedding data and word lists for immediate execution.
 
-### 2. Concurrent Processing
-Utilizes Java's virtual threads to perform concurrent file processing, enhancing performance and efficiency.
+## Prerequisites
 
-### 3. Word Embeddings
-Loads and processes GloVe word embeddings to enable semantic text similarity calculations.
+- **Java Development Kit (JDK) 25** (or a recent EA build supporting the latest preview features).
+- The `--enable-preview` flag must be used during both compilation and execution.
 
-### 4. Customizable Input/Output
-Allows users to specify custom file paths for embeddings, text inputs, and outputs.
+## Installation & Usage
 
-### 5. Cosine Similarity
-Employs cosine similarity calculations to find the most semantically similar words.
+### 1. Clone the Repository
+```sh
+git clone https://github.com/your-username/OOP-Project.git
+cd OOP-Project
+```
+
+### 2. Compile the Project
+Compile the source code, enabling preview features for virtual threads:
+```sh
+mkdir -p bin
+javac -d bin --enable-preview --release 25 src/ie/atu/sw/*.java
+```
+
+### 3. Run the Application
+Execute the compiled bytecode. You can start the interactive runner directly:
+```sh
+java --enable-preview -cp bin ie.atu.sw.Runner
+```
+
+### 4. Application Menu
+Once running, follow the on-screen menu:
+1.  **Specify Embeddings File:** Enter `embeddings.txt` (included).
+2.  **Specify Google 1000 File:** Enter `google-1000.txt` (included).
+3.  **Specify Text File:** Enter the path to your input text (e.g., `test.txt`).
+4.  **Specify Output File:** Enter the desired output path (e.g., `out.txt`).
+5.  **Execute:** Watch the simplification happen in parallel!
 
 ## Main Components
 
-- **Runner**: The entry point of the application, providing a menu-driven interface for users to interact with.
-- **GoogleWordsLoader**: Loads the Google 1000 words into a concurrent set.
-- **TextProcessor**: Simplifies text by processing each line of the input file.
-- **MapGoogle1000**: Manages word embeddings and performs similarity calculations.
-- **SimilarityCalculator**: Calculates cosine similarity between word vectors.
-- **FileProcessor**: Abstract class providing file processing utilities.
-- **GloVEEmbeddingsLoader**: Loads GloVe word embeddings into a concurrent map.
+- **`Runner`**: The interactive CLI entry point.
+- **`TextProcessor`**: The core engine that orchestrates parallel line processing using virtual threads.
+- **`FileProcessor`**: An abstract base class handling safe, sequential I/O operations.
+- **`MapGoogle1000`**: Manages the mapping between complex words and their simple equivalents.
+- **`SimilarityCalculator`**: Performs the vector math (cosine similarity).
+- **`GloVEEmbeddingsLoader`**: Efficiently loads high-dimensional vector data into concurrent maps.
 
-## How to use
-To run the application navigate to the .jar file and execute the following command:  
-```sh
-java --enable-preview -cp ./oop.jar ie.atu.sw.Runner  
-```
-A menu should pop up for you to enter your choices. 
-Please note that for you to select option 5, you must specify all files in options 1-4. 
+---
+*Developed for the Object Oriented Programming module at ATU.*
