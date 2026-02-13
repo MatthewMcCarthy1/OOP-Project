@@ -1,9 +1,18 @@
 # Build output
 out/
-
-# IDE files 
-.idea/
-
+bin/
 *.class
 *.jar
+
+# Generated Output
+output.txt
+test.txt
+
+# IDE and System files
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Logs
 *.log
