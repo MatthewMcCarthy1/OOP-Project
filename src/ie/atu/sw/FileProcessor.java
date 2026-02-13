@@ -5,14 +5,12 @@ import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.StructuredTaskScope;
 
-//Reference: Moodle -> oop-VirtualThreadLabs -> StructuredFileParser.java
-
 /**
- * The FileProcessor class provides a method for writing to files and loading data.
+ * The FileProcessor class provides methods for reading and writing files.
  */
 public abstract class FileProcessor {
     /**
-     * Writes a List of Strings to a specified file using virtual threads.
+     * Writes a List of Strings to a specified file sequentially.
      *
      * <p><b>Time Complexity:</b> O(n), where n is the number of lines to be written.</p>
      *
@@ -22,29 +20,11 @@ public abstract class FileProcessor {
      */
     public void writeFileLines(String filePath, List<String> lines) throws IOException {
         System.out.println("Writing to file: " + filePath);
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
-             var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             for (String line : lines) {
-                scope.fork(() -> {
-                    try {
-                        writer.write(line);
-                        writer.newLine();
-                    } catch (IOException e) {
-                        System.err.println("IO Exception while writing to file: " + filePath);
-                        throw e;
-                    }
-                    return null;
-                });
+                writer.write(line);
+                writer.newLine();
             }
-            // Wait for all threads to complete and handle exceptions
-            scope.join();
-            scope.throwIfFailed();
-        } catch (IOException e) {
-            System.err.println("IO Exception while writing to file: " + filePath);
-            throw e;
-        } catch (InterruptedException | ExecutionException e) {
-            Thread.currentThread().interrupt();
-            System.err.println("Error during file processing: " + e.getMessage());
         }
     }
 
@@ -53,13 +33,13 @@ public abstract class FileProcessor {
      *
      * @param textFile   the path to the file to be processed
      * @param outputFile the path to the output file
-     * @throws IOException if an I/O error occurs during processing
-     * @throws Throwable   if any other error occurs during processing
+     * @throws Throwable   if any error occurs during processing
      */
     abstract void processFile(String textFile, String outputFile) throws Throwable;
 
     /**
-     * Loads data from a specified file and processes each line using virtual threads
+     * Loads data from a specified file and processes each line using virtual threads.
+     * Note: Order is not guaranteed for the process() method calls.
      *
      * <p><b>Time Complexity:</b> O(n), where n is the number of lines in the file.</p>
      *
@@ -68,26 +48,23 @@ public abstract class FileProcessor {
      */
     public void loadAndProcessLines(String filePath) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath));
-             var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+             var scope = StructuredTaskScope.open()) {
             String line;
-            // Process each line in a separate virtual thread
             while ((line = reader.readLine()) != null) {
                 String currentLine = line;
                 scope.fork(() -> {
                     try {
-                        process(currentLine); // Process the line
+                        process(currentLine);
                     } catch (Exception e) {
-                        System.err.println("Failed to process line: " + currentLine + ". Error: " + e.getMessage());
+                        System.err.println("Failed to process line. Error: " + e.getMessage());
                     }
                     return null;
                 });
             }
-            // Wait for all threads to complete and handle exceptions
             scope.join();
-            scope.throwIfFailed();
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            System.err.println("Error during file processing: " + e.getMessage());
+            throw new IOException("Error during concurrent line processing", e);
         }
     }
 
