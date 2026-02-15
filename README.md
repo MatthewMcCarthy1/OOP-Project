@@ -60,4 +60,4 @@ Once running, follow the on-screen menu:
 - **`GloVEEmbeddingsLoader`**: Efficiently loads high-dimensional vector data into concurrent maps.
 
 ---
-*Developed for the Object Oriented Programming module at ATU.*
+*Developed for the Object Oriented Programming module at ATU. Improvements have been made after submission.*
