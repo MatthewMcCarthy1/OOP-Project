@@ -10,11 +10,11 @@ This project is a high-performance text simplification tool built with **Java 25
 
 ## Features
 
-- **🚀 Virtual Threads & Structured Concurrency:** Leverages Java's latest concurrent APIs (`StructuredTaskScope`) for high-throughput, non-blocking I/O operations.
-- **🧠 Word Embeddings:** Uses pre-trained GloVe vectors to calculate semantic similarity and find the best simple synonyms.
-- **⚡ Parallel Processing:** Simplifies large text files efficiently by processing lines concurrently while maintaining output order.
-- **📉 Vector Similarity:** Implements Cosine Similarity to mathematically determine the closeness of word meanings.
-- **📦 Plug-and-Play:** Includes necessary embedding data and word lists for immediate execution.
+- **Virtual Threads & Structured Concurrency:** Leverages Java's latest concurrent APIs (`StructuredTaskScope`) for high-throughput, non-blocking I/O operations.
+- **Word Embeddings:** Uses pre-trained GloVe vectors to calculate semantic similarity and find the best simple synonyms.
+- **Parallel Processing:** Simplifies large text files efficiently by processing lines concurrently while maintaining output order.
+- **Vector Similarity:** Implements Cosine Similarity to mathematically determine the closeness of word meanings.
+- **Plug-and-Play:** Includes necessary embedding data and word lists for immediate execution.
 
 ## Prerequisites
 
